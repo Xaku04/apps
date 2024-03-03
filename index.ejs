@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="ie-edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="assets/css/w3.css">
+		<title>Student List</title>
+	</head>
+	<body class="w3-gray w3-mobile">
+		<div class="w3-bar w3-pink w3-container w3-padding w3-card-4">
+		<form id="logout" action="/logout" method="get">
+			<button type="submit" class="w3-button w3-red w3-right">LOGOUT</button>
+		</form>
+			<h3 style = "text-align:center;">Student List</h3>
+		</div>
+		<br>
+		<div class="w3-container">
+		<form action="/studentlist" method="get">
+			<input type="text" name="search" placeholder="Search...">
+			<button type="submit">Search</button>
+		</form>	
+			<button class="w3-button w3-blue w3-right" onclick="managemodal('studentmodal','block')">+ADD</button><br><br>
+			<table class="w3-table-all w3-animate-top w3-card-4">
+				<tr>
+					<th>IDNO</th>
+					<th>LASTNAME</th>
+					<th>FIRSTNAME</th>
+					<th>COURSE</th>
+					<th>LEVEL</th>
+					<th>ACTION</th>
+				</tr>
+				<% for(var i=0;i<studentlist.length;i++){%>
+					<tr>
+						<td><%=studentlist[i].idno %></td>
+						<td><%=studentlist[i].lastname.toUpperCase() %></td>
+						<td><%=studentlist[i].firstname.toUpperCase() %></td>
+						<td><%=studentlist[i].course.toUpperCase() %></td>
+						<td><%=studentlist[i].level %></td>
+						<td>
+							<button class="w3-green w3-button" onclick="edit(<%=i%>,'<%=studentlist[i].idno%>','<%=studentlist[i].lastname.toUpperCase() %>','<%=studentlist[i].firstname.toUpperCase() %>','<%=studentlist[i].course.toUpperCase() %>','<%=studentlist[i].level %>')">&#9998;</button>
+							<button class="w3-red w3-button" onclick="deletestudent('<%=studentlist[i].idno %>', <%=i%>)">&#128465;</button>
+						</td>
+					</tr>
+				<%}%>
+			</table>
+			<div class="w3-modal" id="studentmodal">
+				<div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-teal">
+						<h3>Student</h3>
+						<span class="w3-button w3-display-topright" onclick="managemodal('studentmodal','none')">&times;</span>
+					</div>
+					<div class="w3-container">
+						<form method="post" action="/save">
+							<input type="hidden" name="flag" id="flag" value="0">
+							<p>
+								<label><b>IDNO</b></label>
+								<input type="text" name="idno" id="idno" class="w3-input w3-border">
+							</p>
+							<p>
+								<label><b>LASTNAME</b></label>
+								<input type="text" name="lastname" id="lastname" class="w3-input w3-border">
+							</p>
+							<p>
+								<label><b>FIRSTNAME</b></label>
+								<input type="text" name="firstname" id="firstname" class="w3-input w3-border">
+							</p>
+							<p>
+								<label><b>COURSE</b></label>
+								<input type="text" name="course" id="course" class="w3-input w3-border">
+							</p>
+							<p>
+								<label><b>LEVEL</b></label>
+								<input type="text" name="level" id="level" class="w3-input w3-border">
+							</p>
+							<p>
+								<input type="submit" value="&#128427; SAVE" class="w3-button w3-blue w3-right">
+							</p>
+							<br><br>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function managemodal(modalname,mode){
+				document.getElementById(modalname).style.display=mode;
+			}
+			///
+			function deletestudent(idno,i){
+				var ok = confirm("Do you really want to delete :"+idno);
+				if(ok){
+					location.href="deletestudent?idno="+idno+"&index="+i;
+				}
+			}
+			///
+			function edit(index,idno,lastname,firstname,course,level){
+				managemodal('studentmodal','block');
+				document.getElementById('idno').value=idno;
+				document.getElementById('lastname').value=lastname;
+				document.getElementById('firstname').value=firstname;
+				document.getElementById('course').value=course;
+				document.getElementById('level').value=level;
+				
+			}
+			//
+			/*function clearfields(){
+				document.getElementById('idno').value='';
+				document.getElementById('lastname').value='';
+				document.getElementById('firstname').value='';
+				document.getElementById('course').value='';
+				document.getElementById('level').value='';
+				document.getElementById('idno').focus();
+			}*/
+		</script>
+	</body>
+</html>
