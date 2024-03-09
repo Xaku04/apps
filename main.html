@@ -25,13 +25,13 @@
 			<br>
 			<button ng-click="logout()" class="w3-red w3-button w3-left">&times; LOGOUT</button>
 			<br>
-			<div class="w3-right">
-			<button ng-disabled="currentPage==0" ng-click="currentPage = currentPage-1">Prev</button>
-			
-			{{ currentPage+1 }} / {{ numberOfPages() }}
-			
-			
-			<button ng-disabled="currentPage>=slist.length/pageSize-1" ng-click="currentPage = currentPage+1">Next</button>
+			<div class="w3-display-middle">
+			  <button ng-disabled="currentPage == 0" ng-click="currentPage = currentPage - 1">Prev</button>
+
+			  <button ng-repeat="page in pageButtons()" ng-click="changePage(page)"
+					  ng-class="{ 'w3-blue': currentPage + 1 === page }">{{ page }}</button>
+
+			  <button ng-disabled="currentPage >= slist.length / pageSize - 1" ng-click="currentPage = currentPage + 1">Next</button>
 			</div>
 			<div class="w3-modal" id="studentmodal">
 				<div class="w3-modal-content w3-animate-top">

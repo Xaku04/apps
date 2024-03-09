@@ -38,13 +38,14 @@ app.controller("mainController", function($scope, $http, $rootScope, $location) 
   $scope.pagesizes = [5, 10, 15, 20];
   $scope.pageSize = 5;
   $scope.currentPage = 0;
+  $scope.sortBy = ''; // Default sorting by no column
+  $scope.sortAsc = true; // Default ascending
 
   $scope.logout = function() {
     $rootScope.logged = false;
     $location.path("/");
     $rootScope.message = "Logged Out";
   }
-
 
   $scope.courses = [{
       'courseid': 'bsit',
@@ -119,9 +120,6 @@ app.controller("mainController", function($scope, $http, $rootScope, $location) 
     });
   }
 
-  $scope.sortBy = 'lastname'; // Default sorting by LastName
-  $scope.sortAsc = true; // Default ascending
-
   $scope.sortStudents = function(column) {
     if ($scope.sortBy === column) {
       $scope.sortAsc = !$scope.sortAsc;
@@ -147,6 +145,36 @@ app.controller("mainController", function($scope, $http, $rootScope, $location) 
       }
       return $scope.sortAsc ? comparison : -comparison;
     });
+  };
+
+  $scope.pageButtons = function() {
+    var buttons = [];
+    var totalPages = $scope.numberOfPages();
+
+    if (totalPages <= 7) {
+      for (var i = 0; i < totalPages; i++) {
+        buttons.push(i + 1);
+      }
+    } else {
+      var start = Math.max(1, $scope.currentPage - 2);
+      var end = Math.min(totalPages, $scope.currentPage + 2);
+
+      if ($scope.currentPage < 4) {
+        end = 5;
+      } else if ($scope.currentPage > totalPages - 3) {
+        start = totalPages - 4;
+      }
+
+      for (var i = start; i <= end; i++) {
+        buttons.push(i);
+      }
+    }
+
+    return buttons;
+  };
+
+  $scope.changePage = function(page) {
+    $scope.currentPage = page - 1;
   };
 });
 
